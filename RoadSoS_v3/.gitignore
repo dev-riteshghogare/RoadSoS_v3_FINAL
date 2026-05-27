@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+venv/
+.env
+
+# Database (auto-generated on startup)
+data/roadsos.db
+
+# Streamlit secrets (NEVER commit this)
+.streamlit/secrets.toml
+
+# OS
+.DS_Store
+Thumbs.db
