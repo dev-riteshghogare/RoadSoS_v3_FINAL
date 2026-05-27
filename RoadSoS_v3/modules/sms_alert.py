@@ -6,12 +6,20 @@ Falls back to WhatsApp deep link + clipboard if Twilio not configured.
 import os
 import json
 import urllib.parse
+import streamlit as st
+
+def _get_secret(key, default=""):
+    """Get secret from st.secrets (Streamlit Cloud) or env vars (local)."""
+    try:
+        return st.secrets[key]
+    except (KeyError, FileNotFoundError, AttributeError):
+        return os.environ.get(key, default)
 
 def send_sms_twilio(to_number: str, message: str) -> dict:
     """Send SMS via Twilio REST API"""
-    account_sid = os.environ.get("TWILIO_ACCOUNT_SID", "")
-    auth_token = os.environ.get("TWILIO_AUTH_TOKEN", "")
-    from_number = os.environ.get("TWILIO_PHONE_NUMBER", "")
+    account_sid = _get_secret("TWILIO_ACCOUNT_SID")
+    auth_token = _get_secret("TWILIO_AUTH_TOKEN")
+    from_number = _get_secret("TWILIO_PHONE_NUMBER")
 
     if not all([account_sid, auth_token, from_number]):
         return {"success": False, "error": "Twilio not configured", "fallback": True}

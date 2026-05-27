@@ -1,8 +1,16 @@
 import requests
 import json
 import os
+import streamlit as st
 
-API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+def _get_secret(key, default=""):
+    """Get secret from st.secrets (Streamlit Cloud) or env vars (local)."""
+    try:
+        return st.secrets[key]
+    except (KeyError, FileNotFoundError, AttributeError):
+        return os.environ.get(key, default)
+
+API_KEY = _get_secret("ANTHROPIC_API_KEY")
 
 HEADERS = {
     "Content-Type": "application/json",
